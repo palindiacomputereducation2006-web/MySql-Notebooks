@@ -2,6 +2,14 @@
 
 In this lecture we created our own database, built a table inside it, and practiced all the main **DDL (Data Definition Language)** commands.
 
+## What this lecture covers
+
+| Family | Commands practiced |
+|--------|--------------------|
+| Navigation | `SHOW DATABASES`, `USE`, `SHOW TABLES`, `DESC` |
+| DDL | `CREATE TABLE`, `ALTER TABLE ... ADD`, `TRUNCATE TABLE`, `DROP TABLE` |
+| DML | `INSERT` (single row + multi-row), `SELECT`, `UPDATE`, `DELETE` |
+
 **Tool used:** MySQL Shell — DB Notebook (execute a line with `Ctrl+Enter`)
 
 ---
