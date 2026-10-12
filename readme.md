@@ -311,7 +311,8 @@ Run that cell first, or queries fail with `No database selected`. If you set **D
 Right-click it → *Open With…* → *SQL Notebook* (see [Step 4](#step-4--open-a-lecture-as-a-notebook)).
 
 **All queries are in one big cell**
-The queries need a blank line between them. Check that the blank lines weren't removed (for example by a formatter).
+- The queries need a blank line between them. Check that the blank lines weren't removed (for example by a formatter).
+- The file must use **LF** line endings. If the status bar (bottom right) shows **CRLF**, SQL Notebook can't see the blank lines. Open the file as text, click **CRLF** → choose **LF**, save, and reopen it with SQL Notebook. The included `.vscode/settings.json` makes VS Code use LF for `.sql` files in this folder.
 
 **"Connect to PostgreSQL" shows above a cell**
 That link comes from the PostgreSQL extension (`ms-ossdata.vscode-pgsql`), not from SQL Notebook — ignore it and connect from the **SQL Notebook** panel. You can also disable the PostgreSQL extension for this folder.
