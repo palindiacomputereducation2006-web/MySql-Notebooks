@@ -12,12 +12,101 @@ In this session we reconnected to the `pal_india` database, paged through the `s
 | Aliases | `SELECT col AS alias`, `FROM table AS alias` |
 | Pattern matching | `LIKE` with `%` — starts with / ends with / contains |
 | DML | `INSERT`, `UPDATE` |
-| DDL | `ALTER TABLE ... ADD COLUMN`, `MODIFY COLUMN ... DEFAULT CURRENT_TIMESTAMP` |
+| DDL | `CREATE DATABASE`, `CREATE TABLE`, `DROP TABLE`, `RENAME TABLE`, `ALTER TABLE ... ADD / RENAME COLUMN / DROP COLUMN / MODIFY COLUMN` |
 | Transactions | `START TRANSACTION` (+ `COMMIT` / `ROLLBACK`) |
 
 **Tool used:** MySQL Shell — DB Notebook (execute a line with `Ctrl+Enter`)
 
 > **Prerequisite:** the `pal_india` database with the `students` table holding 100 sample rows (ids 1–100), and `student_email` set to `UNIQUE`.
+
+---
+
+## 0. Creating the database and the `students` table
+
+### Create the database
+
+```sql
+SHOW DATABASES;
+CREATE DATABASE pal_india;
+SHOW DATABASES;   -- pal_india now appears in the list
+USE pal_india;
+```
+
+### Create the table
+
+```sql
+CREATE TABLE students(
+    student_id INT PRIMARY KEY UNIQUE NOT NULL AUTO_INCREMENT,
+    student_name VARCHAR(50) NOT NULL,
+    student_age INT NULL,
+    student_address VARCHAR(100) NULL,
+    student_email VARCHAR(50) NOT NULL,
+    student_gender VARCHAR(20) NULL,
+    student_contact VARCHAR(25)
+);
+SHOW TABLES;      -- students
+DESC students;    -- shows every column, its type, NULL rule and key
+```
+
+- `PRIMARY KEY` → uniquely identifies each row (it is already unique and not null, so `UNIQUE NOT NULL` is redundant here)
+- `AUTO_INCREMENT` → MySQL fills in `student_id` automatically: 1, 2, 3, ...
+- `NOT NULL` → the column must have a value; `NULL` → the value is optional
+
+### Dropping a table
+
+```sql
+DROP TABLE students;
+SHOW TABLES;      -- empty
+DESC students;    -- ❌ Table 'pal_india.students' doesn't exist
+```
+
+`DROP TABLE` deletes the table **and all its data** permanently. Run the `CREATE TABLE` above again before continuing.
+
+### Changing the table with ALTER
+
+```sql
+-- add a column with a default value
+ALTER TABLE students ADD is_active BOOLEAN DEFAULT TRUE;
+DESC students;
+
+-- rename a column
+ALTER TABLE students RENAME COLUMN is_active TO student_is_active;
+DESC students;
+
+-- add a column, then remove it
+ALTER TABLE students ADD x VARCHAR(12);
+DESC students;
+ALTER TABLE students DROP COLUMN x;
+DESC students;
+
+-- rename a table (here to the same name, so nothing changes)
+RENAME TABLE students TO students;
+SHOW TABLES;
+
+-- change a column definition: make email unique
+ALTER TABLE students MODIFY COLUMN student_email VARCHAR(50) UNIQUE NOT NULL;
+DESC students;    -- student_email now shows Key = UNI
+```
+
+| Command | What it does |
+|---|---|
+| `ALTER TABLE t ADD col TYPE` | Add a new column |
+| `ALTER TABLE t RENAME COLUMN a TO b` | Rename a column |
+| `ALTER TABLE t DROP COLUMN col` | Remove a column and its data |
+| `ALTER TABLE t MODIFY COLUMN col NEW_DEFINITION` | Change a column's type / constraints |
+| `RENAME TABLE old TO new` | Rename a table |
+
+> `BOOLEAN` is stored as `TINYINT(1)` in MySQL, so `DESC` shows `tinyint(1)` and `TRUE` is stored as `1`.
+
+### First insert
+
+```sql
+INSERT INTO students(student_name, student_age, student_address, student_email, student_gender, student_contact)
+VALUES("arif", 16, "dharavi", "arif@gmail.com", "Male", "+9132534546");
+SELECT * FROM students;
+```
+
+`student_id` and `student_is_active` are left out of the column list, so MySQL fills them from `AUTO_INCREMENT` and the default (`TRUE`). After this, the 100 sample rows were inserted into the table.
 
 ---
 
