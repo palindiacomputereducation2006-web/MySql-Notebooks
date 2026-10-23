@@ -2,18 +2,18 @@
     "type": "MySQLNotebook",
     "version": "1.0",
     "caption": "DB Notebook",
-    "content": "use pal_india;\r\nSHOW DATABASES;\r\nSHOW TABLES;\r\nSELECT * FROM arbaz;\r\nEXPLAIN arbaz;\r\nSHOW FULL TABLES WHERE Table_type='VIEW';\r\nCREATE VIEW student_search AS (\r\n    SELECT * FROM students WHERE student_name LIKE '%linda%'\r\n);\r\nSHOW FULL TABLES WHERE table_type='VIEW';\r\nSELECT * FROM student_search;\r\nDROP VIEW arbaz;\r\nCREATE VIEW select_students AS (\r\n    SELECT * FROM students WHERE student_age IN(\r\n    SELECT student_age FROM students GROUP BY student_age HAVING COUNT(*) > 1\r\n    )\r\n);\r\nSHOW FULL TABLES WHERE table_type='VIEW';\r\nSHOW FULL TABLES;\r\nSELECT * FROM student_search;\r\nSELECT * FROM select_students;\r\nSELECT * FROM select_students ORDER BY student_name DESC,student_id ASC;\r\nSELECT * FROM students WHERE student_age LIKE 22;\r\nEXPLAIN SELECT * FROM students WHERE student_age LIKE 22;\r\nCREATE UNIQUE INDEX idx_search_name ON students (student_age,student_email,student_name);\r\nSHOW FULL TABLES;\r\n\r\nSHOW INDEX FROM students;\r\nSELECT * FROM students WHERE student_age like 22;\r\nSELECT * FROM students WHERE student_age like '%22';\r\nEXPLAIN ANALYZE SELECT * FROM students WHERE student_age like '%22';\r\nCREATE TABLE addresses (\r\n    address_id   INT PRIMARY KEY AUTO_INCREMENT,\r\n    student_id   INT NOT NULL,\r\n    address_type ENUM(\"Home\", \"Hostel\", \"Office\", \"Permanent\") NOT NULL,\r\n    street       VARCHAR(150),\r\n    city         VARCHAR(50) NOT NULL,\r\n    state        VARCHAR(50),\r\n    pincode      VARCHAR(10),\r\n    createdAt    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\r\n    updateAt     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP \r\n);\r\nALTER TABLE addresses \r\nMODIFY student_id INT NOT NULL,\r\nADD CONSTRAINT fk_address_student FOREIGN KEY (student_id)\r\nREFERENCES students(student_id) ON DELETE CASCADE;\r\nDESC addresses;\r\nINSERT INTO addresses (student_id, address_type, street, city, state, pincode) VALUES\r\n(1,  \"Home\",      \"12 MG Road\",            \"Indore\",    \"Madhya Pradesh\", \"452001\"),\r\n(1,  \"Hostel\",    \"Block B, Room 204\",     \"Bhopal\",    \"Madhya Pradesh\", \"462001\"),\r\n(1,  \"Office\",    \"Tech Park, Tower 3\",    \"Pune\",      \"Maharashtra\",    \"411057\"),\r\n(2,  \"Home\",      \"45 Civil Lines\",        \"Jaipur\",    \"Rajasthan\",      \"302006\"),\r\n(2,  \"Permanent\", \"Village Rampura\",       \"Ajmer\",     \"Rajasthan\",      \"305001\"),\r\n(5,  \"Home\",      \"8 Park Street\",         \"Kolkata\",   \"West Bengal\",    \"700016\"),\r\n(7,  \"Home\",      \"221 Sector 15\",         \"Noida\",     \"Uttar Pradesh\",  \"201301\"),\r\n(7,  \"Hostel\",    \"PG near Metro Station\", \"Delhi\",     \"Delhi\",          \"110001\"),\r\n(10, \"Home\",      \"3 Anna Salai\",          \"Chennai\",   \"Tamil Nadu\",     \"600002\"),\r\n(12, \"Home\",      \"77 Banjara Hills\",      \"Hyderabad\", \"Telangana\",      \"500034\"),\r\n(22, \"Home\",      \"5 FC Road\",             \"Pune\",      \"Maharashtra\",    \"411004\"),\r\n(22, \"Office\",    \"Magarpatta City\",       \"Pune\",      \"Maharashtra\",    \"411013\"),\r\n(44, \"Home\",      \"19 Residency Road\",     \"Bengaluru\", \"Karnataka\",      \"560025\"),\r\n(101, \"Home\",     \"60 Vijay Nagar\",        \"Indore\",    \"Madhya Pradesh\", \"452010\");\r\nSELECT * from addresses;\r\nSELECT * FROM students\r\nINNER JOIN addresses\r\nON students.student_id=addresses.student_id\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nINNER JOIN addresses as a\r\nON s.student_id=a.student_id\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nLEFT JOIN addresses as a\r\nON s.student_id=a.student_id\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nRIGHT JOIN addresses as a\r\nON s.student_id=a.student_id\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nLEFT JOIN addresses as a\r\nON s.student_id=a.student_id\r\nUNION\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nRIGHT JOIN addresses as a\r\nON s.student_id=a.student_id\r\nSELECT * FROM students CROSS JOIN addresses;\r\nSELECT COUNT(*) FROM students;\r\n",
+    "content": "use pal_india;\r\nSHOW DATABASES;\r\nSHOW TABLES;\r\nSELECT * FROM arbaz;\r\nEXPLAIN arbaz;\r\nSHOW FULL TABLES WHERE Table_type='VIEW';\r\nCREATE VIEW student_search AS (\r\n    SELECT * FROM students WHERE student_name LIKE '%linda%'\r\n);\r\nSHOW FULL TABLES WHERE table_type='VIEW';\r\nSELECT * FROM student_search;\r\nDROP VIEW arbaz;\r\nCREATE VIEW select_students AS (\r\n    SELECT * FROM students WHERE student_age IN(\r\n    SELECT student_age FROM students GROUP BY student_age HAVING COUNT(*) > 1\r\n    )\r\n);\r\nSHOW FULL TABLES WHERE table_type='VIEW';\r\nSHOW FULL TABLES;\r\nSELECT * FROM student_search;\r\nSELECT * FROM select_students;\r\nSELECT * FROM select_students ORDER BY student_name DESC,student_id ASC;\r\nSELECT * FROM students WHERE student_age LIKE 22;\r\nEXPLAIN SELECT * FROM students WHERE student_age LIKE 22;\r\nCREATE UNIQUE INDEX idx_search_name ON students (student_age,student_email,student_name);\r\nSHOW FULL TABLES;\r\n\r\nSHOW INDEX FROM students;\r\nSELECT * FROM students WHERE student_age like 22;\r\nSELECT * FROM students WHERE student_age like '%22';\r\nEXPLAIN ANALYZE SELECT * FROM students WHERE student_age like '%22';\r\nCREATE TABLE addresses (\r\n    address_id   INT PRIMARY KEY AUTO_INCREMENT,\r\n    student_id   INT NOT NULL,\r\n    address_type ENUM(\"Home\", \"Hostel\", \"Office\", \"Permanent\") NOT NULL,\r\n    street       VARCHAR(150),\r\n    city         VARCHAR(50) NOT NULL,\r\n    state        VARCHAR(50),\r\n    pincode      VARCHAR(10),\r\n    createdAt    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\r\n    updateAt     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP \r\n);\r\nALTER TABLE addresses \r\nMODIFY student_id INT NOT NULL,\r\nADD CONSTRAINT fk_address_student FOREIGN KEY (student_id)\r\nREFERENCES students(student_id) ON DELETE CASCADE;\r\nDESC addresses;\r\nINSERT INTO addresses (student_id, address_type, street, city, state, pincode) VALUES\r\n(1,  \"Home\",      \"12 MG Road\",            \"Indore\",    \"Madhya Pradesh\", \"452001\"),\r\n(1,  \"Hostel\",    \"Block B, Room 204\",     \"Bhopal\",    \"Madhya Pradesh\", \"462001\"),\r\n(1,  \"Office\",    \"Tech Park, Tower 3\",    \"Pune\",      \"Maharashtra\",    \"411057\"),\r\n(2,  \"Home\",      \"45 Civil Lines\",        \"Jaipur\",    \"Rajasthan\",      \"302006\"),\r\n(2,  \"Permanent\", \"Village Rampura\",       \"Ajmer\",     \"Rajasthan\",      \"305001\"),\r\n(5,  \"Home\",      \"8 Park Street\",         \"Kolkata\",   \"West Bengal\",    \"700016\"),\r\n(7,  \"Home\",      \"221 Sector 15\",         \"Noida\",     \"Uttar Pradesh\",  \"201301\"),\r\n(7,  \"Hostel\",    \"PG near Metro Station\", \"Delhi\",     \"Delhi\",          \"110001\"),\r\n(10, \"Home\",      \"3 Anna Salai\",          \"Chennai\",   \"Tamil Nadu\",     \"600002\"),\r\n(12, \"Home\",      \"77 Banjara Hills\",      \"Hyderabad\", \"Telangana\",      \"500034\"),\r\n(22, \"Home\",      \"5 FC Road\",             \"Pune\",      \"Maharashtra\",    \"411004\"),\r\n(22, \"Office\",    \"Magarpatta City\",       \"Pune\",      \"Maharashtra\",    \"411013\"),\r\n(44, \"Home\",      \"19 Residency Road\",     \"Bengaluru\", \"Karnataka\",      \"560025\"),\r\n(101, \"Home\",     \"60 Vijay Nagar\",        \"Indore\",    \"Madhya Pradesh\", \"452010\");\r\nSELECT * from addresses;\r\nSELECT * FROM students\r\nINNER JOIN addresses\r\nON students.student_id=addresses.student_id\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nINNER JOIN addresses as a\r\nON s.student_id=a.student_id\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nLEFT JOIN addresses as a\r\nON s.student_id=a.student_id\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nRIGHT JOIN addresses as a\r\nON s.student_id=a.student_id\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nLEFT JOIN addresses as a\r\nON s.student_id=a.student_id\r\nUNION\r\nSELECT s.student_id,s.student_name,s.student_age,s.student_email,a.street,a.city,a.student_id FROM students AS s\r\nRIGHT JOIN addresses as a\r\nON s.student_id=a.student_id\r\nSELECT * FROM students CROSS JOIN addresses;\r\nSELECT COUNT(*) FROM students;\r\nuse pal_india;\r\nCREATE TABLE course_master (\r\n    course_id              INT PRIMARY KEY AUTO_INCREMENT,\r\n    course_name            VARCHAR(100) NOT NULL UNIQUE,\r\n    course_fee             DECIMAL(10, 2),\r\n    course_duration_months INT,\r\n    createdAt              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\r\n    updateAt               TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\r\n);\r\nINSERT INTO course_master (course_name, course_fee, course_duration_months) VALUES\r\n(\"MySQL Fundamentals\",          4999.00,  2),    -- course_id 1\r\n(\"Python for Data Engineering\", 7999.00,  3),    -- course_id 2\r\n(\"Java Backend Development\",    9999.00,  6),    -- course_id 3\r\n(\"Apache Spark\",                8999.00,  3),    -- course_id 4\r\n(\"Power BI Dashboards\",         3999.00,  1),    -- course_id 5\r\n(\"AWS Cloud Practitioner\",      6999.00,  2),    -- course_id 6\r\n(\"Apache Kafka\",                8499.00,  2),    -- course_id 7\r\n(\"Machine Learning Basics\",    11999.00,  4);\r\nSELECT * FROM course_master;\r\nCREATE TABLE student_course_mapping (\r\n    student_id  INT NOT NULL,\r\n    course_id   INT NOT NULL,\r\n    enrolled_on DATE DEFAULT (CURRENT_DATE),\r\n    PRIMARY KEY (student_id, course_id),\r\n    CONSTRAINT fk_scm_student FOREIGN KEY (student_id)\r\n        REFERENCES students(student_id) ON DELETE CASCADE,\r\n    CONSTRAINT fk_scm_course  FOREIGN KEY (course_id)\r\n        REFERENCES course_master(course_id) ON DELETE CASCADE\r\n);\r\nINSERT INTO student_course_mapping (student_id, course_id, enrolled_on) VALUES\r\n(1, 1, \"2026-09-01\"), (1, 2, \"2026-09-01\"), (1, 4, \"2026-09-15\"),    -- student 1 -> 3 courses\r\n(2, 1, \"2026-09-02\"), (2, 3, \"2026-09-02\"),                          -- student 2 -> 2 courses\r\n(5, 1, \"2026-09-03\"), (5, 4, \"2026-09-03\"),\r\n(7, 5, \"2026-09-05\"),\r\n(10, 2, \"2026-09-06\"), (10, 6, \"2026-09-06\"), (10, 7, \"2026-09-10\"),\r\n(12, 6, \"2026-09-07\"),\r\n(15, 1, \"2026-09-08\"),\r\n(22, 3, \"2026-09-09\"), (22, 7, \"2026-09-09\"),\r\n(39, 5, \"2026-09-11\"),\r\n(44, 6, \"2026-09-12\"), (44, 2, \"2026-09-12\"),\r\n(48, 4, \"2026-09-13\"),\r\n(75, 2, \"2026-09-14\"),\r\n(89, 1, \"2026-09-16\"),\r\n(96, 7, \"2026-09-17\"),\r\n(101, 3, \"2026-09-18\"), (101, 1, \"2026-09-18\");\r\nSELECT * FROM student_course_mapping;\r\nSELECT * FROM students \r\nINNER JOIN student_course_mapping ON students.student_id = student_course_mapping.student_id\r\nINNER JOIN course_master ON course_master.course_id = student_course_mapping.course_id;\r\n",
     "options": {},
     "viewState": {
         "cursorState": [
             {
                 "inSelectionMode": false,
                 "selectionStart": {
-                    "lineNumber": 85,
+                    "lineNumber": 134,
                     "column": 1
                 },
                 "position": {
-                    "lineNumber": 85,
+                    "lineNumber": 134,
                     "column": 1
                 }
             }
@@ -21,10 +21,10 @@
         "viewState": {
             "scrollLeft": 0,
             "firstPosition": {
-                "lineNumber": 83,
+                "lineNumber": 131,
                 "column": 1
             },
-            "firstPositionDeltaTop": 212
+            "firstPositionDeltaTop": -21
         },
         "contributionsState": {
             "editor.contrib.folding": {},
@@ -72,7 +72,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "b6437c3c-280f-4045-d28a-ee4a9fea632a"
+                        "72cfb529-8bee-47c5-a279-7afbc6a7108e"
                     ]
                 },
                 "currentHeight": 36,
@@ -91,8 +91,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "b6437c3c-280f-4045-d28a-ee4a9fea632a",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "72cfb529-8bee-47c5-a279-7afbc6a7108e",
                     "rows": [
                         {
                             "0": "information_schema"
@@ -156,7 +156,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "e1586ae4-cbf5-408c-d767-59c9e8a75a82"
+                        "fa0095d0-5098-4bdf-8986-935e17938c62"
                     ]
                 },
                 "currentHeight": 36,
@@ -175,8 +175,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "e1586ae4-cbf5-408c-d767-59c9e8a75a82",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "fa0095d0-5098-4bdf-8986-935e17938c62",
                     "rows": [
                         {
                             "0": "student_search"
@@ -225,7 +225,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "f8b2072f-bb47-4c4b-bd78-89bca2e128cb"
+                        "ff2f0e6b-470f-4062-d4b3-67db0f90ee30"
                     ]
                 },
                 "currentHeight": 36,
@@ -244,8 +244,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "f8b2072f-bb47-4c4b-bd78-89bca2e128cb",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "ff2f0e6b-470f-4062-d4b3-67db0f90ee30",
                     "rows": [
                         {
                             "0": 1,
@@ -1659,7 +1659,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "577c283d-aedf-40ea-a887-895a544cc9e6"
+                        "277fe8b3-4cc5-4859-d03f-22e4fd2ec507"
                     ]
                 },
                 "currentHeight": 36,
@@ -1678,8 +1678,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "577c283d-aedf-40ea-a887-895a544cc9e6",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "277fe8b3-4cc5-4859-d03f-22e4fd2ec507",
                     "rows": [
                         {
                             "0": "student_id",
@@ -1885,7 +1885,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "f2841ed2-25fd-49d4-cb4c-48564c0455e1"
+                        "e7342c3c-6909-4b96-c421-4adb9849d922"
                     ]
                 },
                 "currentHeight": 36,
@@ -1904,8 +1904,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "f2841ed2-25fd-49d4-cb4c-48564c0455e1",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "e7342c3c-6909-4b96-c421-4adb9849d922",
                     "rows": [
                         {
                             "0": "arbaz",
@@ -1995,7 +1995,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "6394b8eb-5426-4488-e0de-18823dfa174b"
+                        "8616a793-d168-49e9-ecaa-051f1fa4a01c"
                     ]
                 },
                 "currentHeight": 116.328125,
@@ -2014,8 +2014,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "6394b8eb-5426-4488-e0de-18823dfa174b",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "8616a793-d168-49e9-ecaa-051f1fa4a01c",
                     "rows": [
                         {
                             "0": "arbaz",
@@ -2077,7 +2077,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "04a54f1e-fb19-4174-d031-357677740d13"
+                        "a2a4bf9b-6f2f-43db-965a-8eaff6ee8dca"
                     ]
                 },
                 "currentHeight": 107,
@@ -2096,8 +2096,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "04a54f1e-fb19-4174-d031-357677740d13",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "a2a4bf9b-6f2f-43db-965a-8eaff6ee8dca",
                     "rows": [
                         {
                             "0": 1,
@@ -2375,7 +2375,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "663d64c5-8a8e-4339-b9c7-de35457ce1df"
+                        "7bc9e5e9-ea5c-4442-ec60-7792a91f4a9a"
                     ]
                 },
                 "currentHeight": 36,
@@ -2394,8 +2394,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "663d64c5-8a8e-4339-b9c7-de35457ce1df",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "7bc9e5e9-ea5c-4442-ec60-7792a91f4a9a",
                     "rows": [
                         {
                             "0": "select_students",
@@ -2457,7 +2457,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "c6186cfa-bd4e-4763-f942-261dd4452033"
+                        "ac1ddca1-c2cb-4c89-d571-9c47f50f9530"
                     ]
                 },
                 "currentHeight": 36,
@@ -2476,8 +2476,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "c6186cfa-bd4e-4763-f942-261dd4452033",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "ac1ddca1-c2cb-4c89-d571-9c47f50f9530",
                     "rows": [
                         {
                             "0": "select_students",
@@ -2543,7 +2543,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "8f652e37-d518-4ae8-8fa0-67380c4076db"
+                        "87ad8f8d-0955-4660-bc12-7f4a3e15d9c5"
                     ]
                 },
                 "currentHeight": 36,
@@ -2562,8 +2562,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "8f652e37-d518-4ae8-8fa0-67380c4076db",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "87ad8f8d-0955-4660-bc12-7f4a3e15d9c5",
                     "rows": [
                         {
                             "0": 1,
@@ -2777,7 +2777,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "a25afe60-48ba-4103-eeb8-4cfab873b870"
+                        "cb27ebac-030a-4dd9-bb88-f77d47cddf01"
                     ]
                 },
                 "currentHeight": 36,
@@ -2796,8 +2796,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "a25afe60-48ba-4103-eeb8-4cfab873b870",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "cb27ebac-030a-4dd9-bb88-f77d47cddf01",
                     "rows": [
                         {
                             "0": 1,
@@ -4127,7 +4127,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "df899482-079f-49f8-ca2c-8a800f78cc14"
+                        "1c4dc630-a828-4f39-c1a6-883304136e70"
                     ]
                 },
                 "currentHeight": 36,
@@ -4146,8 +4146,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "df899482-079f-49f8-ca2c-8a800f78cc14",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "1c4dc630-a828-4f39-c1a6-883304136e70",
                     "rows": [
                         {
                             "0": 18,
@@ -5477,7 +5477,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "d777d5d2-bf36-4726-be89-86f1c2bc8e53"
+                        "7fa22999-0345-47ba-869e-90ec7a85ce22"
                     ]
                 },
                 "currentHeight": 36,
@@ -5496,8 +5496,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "d777d5d2-bf36-4726-be89-86f1c2bc8e53",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "7fa22999-0345-47ba-869e-90ec7a85ce22",
                     "rows": [
                         {
                             "0": 22,
@@ -5766,7 +5766,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "85c6a120-bd15-4eee-dc17-ee4881a39863"
+                        "1647b9ea-c7ff-423c-8d82-28a4adae6a6f"
                     ]
                 },
                 "currentHeight": 101.66665649414062,
@@ -5785,8 +5785,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "85c6a120-bd15-4eee-dc17-ee4881a39863",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "1647b9ea-c7ff-423c-8d82-28a4adae6a6f",
                     "rows": [
                         {
                             "0": 1,
@@ -6080,7 +6080,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "fa2ef877-015d-4926-d745-ac42b9c9128a"
+                        "bfe74161-f811-4181-8fbc-95c7fe88e12e"
                     ]
                 },
                 "currentHeight": 36,
@@ -6099,8 +6099,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "fa2ef877-015d-4926-d745-ac42b9c9128a",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "bfe74161-f811-4181-8fbc-95c7fe88e12e",
                     "rows": [
                         {
                             "0": "select_students",
@@ -6166,7 +6166,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "3542a05a-1098-414b-a7fe-413383d4c60e"
+                        "64626ba3-699f-493b-ea12-df7d0477575e"
                     ]
                 },
                 "currentHeight": 205.65625,
@@ -6185,8 +6185,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "3542a05a-1098-414b-a7fe-413383d4c60e",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "64626ba3-699f-493b-ea12-df7d0477575e",
                     "rows": [
                         {
                             "0": "students",
@@ -6566,7 +6566,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "24b477be-d170-4c48-fe90-324e5137442a"
+                        "879411f7-e863-4022-e22e-f64cb195c75e"
                     ]
                 },
                 "currentHeight": 205.65625,
@@ -6585,8 +6585,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "24b477be-d170-4c48-fe90-324e5137442a",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "879411f7-e863-4022-e22e-f64cb195c75e",
                     "rows": [
                         {
                             "0": 22,
@@ -6855,7 +6855,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "272c19d5-9058-4b0d-b675-0c9153a2f84e"
+                        "818d50ef-f188-4799-ce2a-a943b9b196dc"
                     ]
                 },
                 "currentHeight": 36,
@@ -6874,8 +6874,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "272c19d5-9058-4b0d-b675-0c9153a2f84e",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "818d50ef-f188-4799-ce2a-a943b9b196dc",
                     "rows": [
                         {
                             "0": 22,
@@ -7144,7 +7144,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "98fb2c4e-2351-4c58-a605-08e5507365c4"
+                        "f67ea7d6-ab81-4e1f-c8d5-a04a1874ae3f"
                     ]
                 },
                 "currentHeight": 109.65625,
@@ -7163,8 +7163,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "98fb2c4e-2351-4c58-a605-08e5507365c4",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "f67ea7d6-ab81-4e1f-c8d5-a04a1874ae3f",
                     "rows": [
                         {
                             "0": "-> Filter: (students.student_age like '%22')  (cost=10.3 rows=11.2) (actual time=0.0718..0.158 rows=5 loops=1)\n    -> Table scan on students  (cost=10.3 rows=101) (actual time=0.0419..0.119 rows=101 loops=1)\n"
@@ -7277,7 +7277,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "6c491a79-ced9-416f-adde-d5c0891d2371"
+                        "d35882eb-e9a0-4b4c-f359-eb869c9c1e48"
                     ]
                 },
                 "currentHeight": 36,
@@ -7296,8 +7296,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "6c491a79-ced9-416f-adde-d5c0891d2371",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "d35882eb-e9a0-4b4c-f359-eb869c9c1e48",
                     "rows": [
                         {
                             "0": "address_id",
@@ -7527,7 +7527,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "af24208c-5df7-4ff0-dc19-3a645a0f20bb"
+                        "c29e35bb-eab5-480f-f698-d6126b0c453a"
                     ]
                 },
                 "currentHeight": 36,
@@ -7546,8 +7546,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "af24208c-5df7-4ff0-dc19-3a645a0f20bb",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "c29e35bb-eab5-480f-f698-d6126b0c453a",
                     "rows": [
                         {
                             "0": 1,
@@ -7881,7 +7881,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "2c773e86-946d-4b6a-ef61-918e43ae3923"
+                        "050a9ce7-671b-4688-b7a1-7f3be8fbf5e7"
                     ]
                 },
                 "currentHeight": 36,
@@ -7900,8 +7900,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "2c773e86-946d-4b6a-ef61-918e43ae3923",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "050a9ce7-671b-4688-b7a1-7f3be8fbf5e7",
                     "rows": [
                         {
                             "0": 1,
@@ -8546,7 +8546,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "6629185d-93a0-46ad-aed1-f9685619ec21"
+                        "5b73baeb-8bf8-4dab-96ea-b8584e0cd1b4"
                     ]
                 },
                 "currentHeight": 36,
@@ -8565,8 +8565,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "6629185d-93a0-46ad-aed1-f9685619ec21",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "5b73baeb-8bf8-4dab-96ea-b8584e0cd1b4",
                     "rows": [
                         {
                             "0": 1,
@@ -8850,7 +8850,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "5115a9e3-46e3-48af-eff5-d58c84a2ff3f"
+                        "ca264dbc-d052-4d2c-cd27-9ce54d865119"
                     ]
                 },
                 "currentHeight": 36,
@@ -8869,8 +8869,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "5115a9e3-46e3-48af-eff5-d58c84a2ff3f",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "ca264dbc-d052-4d2c-cd27-9ce54d865119",
                     "rows": [
                         {
                             "0": 43,
@@ -9982,7 +9982,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "06a9ed59-751c-4451-dace-4da948e3c493"
+                        "bd50dc59-185f-4c2d-ac7d-00c0ee66c288"
                     ]
                 },
                 "currentHeight": 36,
@@ -10001,8 +10001,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "06a9ed59-751c-4451-dace-4da948e3c493",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "bd50dc59-185f-4c2d-ac7d-00c0ee66c288",
                     "rows": [
                         {
                             "0": 1,
@@ -10286,7 +10286,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "21799527-e10d-4dd9-c55c-35078d4a4f84"
+                        "64ee4904-0476-4935-9fe2-04789691ba75"
                     ]
                 },
                 "currentHeight": 352,
@@ -10305,8 +10305,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "21799527-e10d-4dd9-c55c-35078d4a4f84",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "64ee4904-0476-4935-9fe2-04789691ba75",
                     "rows": [
                         {
                             "0": 43,
@@ -11418,7 +11418,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "068181d0-0c9c-4fb3-e420-b02eb55b7822"
+                        "579809d9-34ce-4730-c8af-04a1f9461083"
                     ]
                 },
                 "currentHeight": 352,
@@ -11437,8 +11437,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "068181d0-0c9c-4fb3-e420-b02eb55b7822",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "579809d9-34ce-4730-c8af-04a1f9461083",
                     "rows": [
                         {
                             "0": 1,
@@ -32776,8 +32776,8 @@
                     "fullTableName": ""
                 },
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "068181d0-0c9c-4fb3-e420-b02eb55b7822",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "579809d9-34ce-4730-c8af-04a1f9461083",
                     "rows": [],
                     "executionInfo": {
                         "text": "OK, 1000 records retrieved in 1.438ms"
@@ -32800,7 +32800,7 @@
                 "result": {
                     "type": "resultIds",
                     "list": [
-                        "77e2df6d-475f-422f-f1ee-518febdd8baa"
+                        "fad8b208-b9d0-48fa-8eac-4a2d59051a8d"
                     ]
                 },
                 "currentHeight": 91.65625,
@@ -32819,8 +32819,8 @@
             },
             "data": [
                 {
-                    "tabId": "ae5f0518-3aeb-413e-d04d-ba9496224669",
-                    "resultId": "77e2df6d-475f-422f-f1ee-518febdd8baa",
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "fad8b208-b9d0-48fa-8eac-4a2d59051a8d",
                     "rows": [
                         {
                             "0": 101
@@ -32865,6 +32865,1487 @@
             "state": {
                 "start": 85,
                 "end": 85,
+                "language": "mysql",
+                "result": {
+                    "type": "text",
+                    "text": [
+                        {
+                            "type": 2,
+                            "index": 0,
+                            "resultId": "cd294f00-c910-431d-a247-c75d555a02bd",
+                            "content": "OK, 0 records retrieved in 0.708ms"
+                        }
+                    ]
+                },
+                "currentHeight": 28,
+                "currentSet": 1,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 14
+                        },
+                        "contentStart": 0,
+                        "state": 0
+                    }
+                ]
+            },
+            "data": []
+        },
+        {
+            "state": {
+                "start": 86,
+                "end": 93,
+                "language": "mysql",
+                "result": {
+                    "type": "text",
+                    "text": [
+                        {
+                            "type": 2,
+                            "index": 0,
+                            "resultId": "26aac28b-3a63-4312-be22-8a21004f535f",
+                            "content": "OK, 0 records retrieved in 42.575ms"
+                        }
+                    ]
+                },
+                "currentHeight": 28,
+                "currentSet": 1,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 377
+                        },
+                        "contentStart": 0,
+                        "state": 3
+                    }
+                ]
+            },
+            "data": []
+        },
+        {
+            "state": {
+                "start": 94,
+                "end": 102,
+                "language": "mysql",
+                "result": {
+                    "type": "text",
+                    "text": [
+                        {
+                            "type": 2,
+                            "index": 0,
+                            "resultId": "aa121664-ffd7-40e7-d37d-bb2884e55bb4",
+                            "content": "OK, 8 rows affected in 20.032ms"
+                        }
+                    ]
+                },
+                "currentHeight": 28,
+                "currentSet": 1,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 576
+                        },
+                        "contentStart": 0,
+                        "state": 3
+                    }
+                ]
+            },
+            "data": []
+        },
+        {
+            "state": {
+                "start": 103,
+                "end": 103,
+                "language": "mysql",
+                "result": {
+                    "type": "resultIds",
+                    "list": [
+                        "97597c95-dfad-4a3d-ee12-c8d1d87daf67"
+                    ]
+                },
+                "currentHeight": 36,
+                "currentSet": 1,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 28
+                        },
+                        "contentStart": 0,
+                        "state": 0
+                    }
+                ]
+            },
+            "data": [
+                {
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "97597c95-dfad-4a3d-ee12-c8d1d87daf67",
+                    "rows": [
+                        {
+                            "0": 1,
+                            "1": "MySQL Fundamentals",
+                            "2": "4999.00",
+                            "3": 2,
+                            "4": "2026-10-16 08:33:57",
+                            "5": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 2,
+                            "1": "Python for Data Engineering",
+                            "2": "7999.00",
+                            "3": 3,
+                            "4": "2026-10-16 08:33:57",
+                            "5": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 3,
+                            "1": "Java Backend Development",
+                            "2": "9999.00",
+                            "3": 6,
+                            "4": "2026-10-16 08:33:57",
+                            "5": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 4,
+                            "1": "Apache Spark",
+                            "2": "8999.00",
+                            "3": 3,
+                            "4": "2026-10-16 08:33:57",
+                            "5": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 5,
+                            "1": "Power BI Dashboards",
+                            "2": "3999.00",
+                            "3": 1,
+                            "4": "2026-10-16 08:33:57",
+                            "5": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 6,
+                            "1": "AWS Cloud Practitioner",
+                            "2": "6999.00",
+                            "3": 2,
+                            "4": "2026-10-16 08:33:57",
+                            "5": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 7,
+                            "1": "Apache Kafka",
+                            "2": "8499.00",
+                            "3": 2,
+                            "4": "2026-10-16 08:33:57",
+                            "5": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 8,
+                            "1": "Machine Learning Basics",
+                            "2": "11999.00",
+                            "3": 4,
+                            "4": "2026-10-16 08:33:57",
+                            "5": "2026-10-16 08:33:57"
+                        }
+                    ],
+                    "columns": [
+                        {
+                            "title": "course_id",
+                            "field": "0",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": true,
+                            "nullable": false,
+                            "autoIncrement": true
+                        },
+                        {
+                            "title": "course_name",
+                            "field": "1",
+                            "dataType": {
+                                "type": 17,
+                                "characterMaximumLength": 65535,
+                                "flags": [
+                                    "BINARY",
+                                    "ASCII",
+                                    "UNICODE"
+                                ],
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "course_fee",
+                            "field": "2",
+                            "dataType": {
+                                "type": 10,
+                                "flags": [
+                                    "UNSIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 65,
+                                "numericScale": 30,
+                                "parameterFormatType": "TwoOrOneOrZero",
+                                "synonyms": [
+                                    "FIXED",
+                                    "NUMERIC",
+                                    "DEC"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": true,
+                            "autoIncrement": false,
+                            "default": null
+                        },
+                        {
+                            "title": "course_duration_months",
+                            "field": "3",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": true,
+                            "autoIncrement": false,
+                            "default": null
+                        },
+                        {
+                            "title": "createdAt",
+                            "field": "4",
+                            "dataType": {
+                                "type": 26,
+                                "dateTimePrecision": 8,
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": true,
+                            "autoIncrement": false,
+                            "default": "CURRENT_TIMESTAMP"
+                        },
+                        {
+                            "title": "updateAt",
+                            "field": "5",
+                            "dataType": {
+                                "type": 26,
+                                "dateTimePrecision": 8,
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": true,
+                            "autoIncrement": false,
+                            "default": "CURRENT_TIMESTAMP"
+                        }
+                    ],
+                    "executionInfo": {
+                        "text": "OK, 8 records retrieved in 1.523ms"
+                    },
+                    "totalRowCount": 8,
+                    "hasMoreRows": false,
+                    "currentPage": 0,
+                    "index": 0,
+                    "sql": "SELECT * FROM course_master",
+                    "updatable": true,
+                    "fullTableName": "course_master"
+                }
+            ]
+        },
+        {
+            "state": {
+                "start": 104,
+                "end": 113,
+                "language": "mysql",
+                "result": {
+                    "type": "text",
+                    "text": [
+                        {
+                            "type": 2,
+                            "index": 0,
+                            "resultId": "c188302f-b7a6-4f2c-8079-e2c7793bed65",
+                            "content": "OK, 0 records retrieved in 44.058ms"
+                        }
+                    ]
+                },
+                "currentHeight": 28,
+                "currentSet": 1,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 416
+                        },
+                        "contentStart": 0,
+                        "state": 3
+                    }
+                ]
+            },
+            "data": []
+        },
+        {
+            "state": {
+                "start": 114,
+                "end": 129,
+                "language": "mysql",
+                "result": {
+                    "type": "text",
+                    "text": [
+                        {
+                            "type": 2,
+                            "index": 0,
+                            "resultId": "db7127ad-3e3e-4b56-c4d0-d0b7c2bdcf71",
+                            "content": "OK, 24 rows affected in 10.241ms"
+                        }
+                    ]
+                },
+                "currentHeight": 28,
+                "currentSet": 1,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 704
+                        },
+                        "contentStart": 0,
+                        "state": 3
+                    }
+                ]
+            },
+            "data": []
+        },
+        {
+            "state": {
+                "start": 130,
+                "end": 130,
+                "language": "mysql",
+                "result": {
+                    "type": "resultIds",
+                    "list": [
+                        "f7bda515-e341-4f60-a6b4-3cb0b19e57bc"
+                    ]
+                },
+                "currentHeight": 36,
+                "currentSet": 1,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 37
+                        },
+                        "contentStart": 0,
+                        "state": 0
+                    }
+                ]
+            },
+            "data": [
+                {
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "f7bda515-e341-4f60-a6b4-3cb0b19e57bc",
+                    "rows": [
+                        {
+                            "0": 1,
+                            "1": 1,
+                            "2": "2026-09-01"
+                        },
+                        {
+                            "0": 1,
+                            "1": 2,
+                            "2": "2026-09-01"
+                        },
+                        {
+                            "0": 1,
+                            "1": 4,
+                            "2": "2026-09-15"
+                        },
+                        {
+                            "0": 2,
+                            "1": 1,
+                            "2": "2026-09-02"
+                        },
+                        {
+                            "0": 2,
+                            "1": 3,
+                            "2": "2026-09-02"
+                        },
+                        {
+                            "0": 5,
+                            "1": 1,
+                            "2": "2026-09-03"
+                        },
+                        {
+                            "0": 5,
+                            "1": 4,
+                            "2": "2026-09-03"
+                        },
+                        {
+                            "0": 7,
+                            "1": 5,
+                            "2": "2026-09-05"
+                        },
+                        {
+                            "0": 10,
+                            "1": 2,
+                            "2": "2026-09-06"
+                        },
+                        {
+                            "0": 10,
+                            "1": 6,
+                            "2": "2026-09-06"
+                        },
+                        {
+                            "0": 10,
+                            "1": 7,
+                            "2": "2026-09-10"
+                        },
+                        {
+                            "0": 12,
+                            "1": 6,
+                            "2": "2026-09-07"
+                        },
+                        {
+                            "0": 15,
+                            "1": 1,
+                            "2": "2026-09-08"
+                        },
+                        {
+                            "0": 22,
+                            "1": 3,
+                            "2": "2026-09-09"
+                        },
+                        {
+                            "0": 22,
+                            "1": 7,
+                            "2": "2026-09-09"
+                        },
+                        {
+                            "0": 39,
+                            "1": 5,
+                            "2": "2026-09-11"
+                        },
+                        {
+                            "0": 44,
+                            "1": 2,
+                            "2": "2026-09-12"
+                        },
+                        {
+                            "0": 44,
+                            "1": 6,
+                            "2": "2026-09-12"
+                        },
+                        {
+                            "0": 48,
+                            "1": 4,
+                            "2": "2026-09-13"
+                        },
+                        {
+                            "0": 75,
+                            "1": 2,
+                            "2": "2026-09-14"
+                        },
+                        {
+                            "0": 89,
+                            "1": 1,
+                            "2": "2026-09-16"
+                        },
+                        {
+                            "0": 96,
+                            "1": 7,
+                            "2": "2026-09-17"
+                        },
+                        {
+                            "0": 101,
+                            "1": 1,
+                            "2": "2026-09-18"
+                        },
+                        {
+                            "0": 101,
+                            "1": 3,
+                            "2": "2026-09-18"
+                        }
+                    ],
+                    "columns": [
+                        {
+                            "title": "student_id",
+                            "field": "0",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": true,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "course_id",
+                            "field": "1",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": true,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "enrolled_on",
+                            "field": "2",
+                            "dataType": {
+                                "type": 27,
+                                "needsQuotes": true
+                            },
+                            "inPK": false,
+                            "nullable": true,
+                            "autoIncrement": false,
+                            "default": "curdate()"
+                        }
+                    ],
+                    "executionInfo": {
+                        "text": "OK, 24 records retrieved in 0.716ms"
+                    },
+                    "totalRowCount": 24,
+                    "hasMoreRows": false,
+                    "currentPage": 0,
+                    "index": 0,
+                    "sql": "SELECT * FROM student_course_mapping",
+                    "updatable": true,
+                    "fullTableName": "student_course_mapping"
+                }
+            ]
+        },
+        {
+            "state": {
+                "start": 131,
+                "end": 133,
+                "language": "mysql",
+                "result": {
+                    "type": "resultIds",
+                    "list": [
+                        "02fb126b-764b-4afa-a63a-019c6b881364"
+                    ]
+                },
+                "currentHeight": 352,
+                "currentSet": 1,
+                "statements": [
+                    {
+                        "delimiter": ";",
+                        "span": {
+                            "start": 0,
+                            "length": 204
+                        },
+                        "contentStart": 0,
+                        "state": 3
+                    }
+                ]
+            },
+            "data": [
+                {
+                    "tabId": "d2232dcf-9eb8-45fc-f27d-3b01b399bcab",
+                    "resultId": "02fb126b-764b-4afa-a63a-019c6b881364",
+                    "rows": [
+                        {
+                            "0": 1,
+                            "1": "Linda Hernandez",
+                            "2": 20,
+                            "3": "8945 Maple Dr, Houston, TX 87397",
+                            "4": "linda.patel1@hotmail.com",
+                            "5": null,
+                            "6": "+1-438-717-1434",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 1,
+                            "11": 1,
+                            "12": "2026-09-01",
+                            "13": 1,
+                            "14": "MySQL Fundamentals",
+                            "15": "4999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 2,
+                            "1": "Puja Tomar",
+                            "2": 26,
+                            "3": "2625 Highland Ave, New York, NY 65392",
+                            "4": "pooja.turner2@outlook.com",
+                            "5": "Female",
+                            "6": "+1-981-544-2674",
+                            "7": 1,
+                            "8": null,
+                            "9": "2026-10-01 07:58:04",
+                            "10": 2,
+                            "11": 1,
+                            "12": "2026-09-02",
+                            "13": 1,
+                            "14": "MySQL Fundamentals",
+                            "15": "4999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 5,
+                            "1": "Frank Hughes",
+                            "2": 27,
+                            "3": null,
+                            "4": "frank.hughes5@student.edu",
+                            "5": "Male",
+                            "6": "+1-367-673-7216",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 5,
+                            "11": 1,
+                            "12": "2026-09-03",
+                            "13": 1,
+                            "14": "MySQL Fundamentals",
+                            "15": "4999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 15,
+                            "1": "Arjun Verma",
+                            "2": 18,
+                            "3": "5814 Church St, Atlanta, GA 63883",
+                            "4": "arjun.verma15@hotmail.com",
+                            "5": "Male",
+                            "6": "+1-869-861-2612",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 15,
+                            "11": 1,
+                            "12": "2026-09-08",
+                            "13": 1,
+                            "14": "MySQL Fundamentals",
+                            "15": "4999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 89,
+                            "1": "Steven Hall",
+                            "2": 22,
+                            "3": "9416 Lake Rd, Dallas, TX 66244",
+                            "4": "steven.hall89@mail.com",
+                            "5": "Male",
+                            "6": "+1-836-828-1430",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 89,
+                            "11": 1,
+                            "12": "2026-09-16",
+                            "13": 1,
+                            "14": "MySQL Fundamentals",
+                            "15": "4999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 101,
+                            "1": "Sharon Alvarez",
+                            "2": 16,
+                            "3": "dharavi",
+                            "4": "arif@gmail.com",
+                            "5": "Male",
+                            "6": "+9132534546",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 101,
+                            "11": 1,
+                            "12": "2026-09-18",
+                            "13": 1,
+                            "14": "MySQL Fundamentals",
+                            "15": "4999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 1,
+                            "1": "Linda Hernandez",
+                            "2": 20,
+                            "3": "8945 Maple Dr, Houston, TX 87397",
+                            "4": "linda.patel1@hotmail.com",
+                            "5": null,
+                            "6": "+1-438-717-1434",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 1,
+                            "11": 2,
+                            "12": "2026-09-01",
+                            "13": 2,
+                            "14": "Python for Data Engineering",
+                            "15": "7999.00",
+                            "16": 3,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 10,
+                            "1": "James Castillo",
+                            "2": 21,
+                            "3": "8327 Cedar Ln, Philadelphia, PA 91959",
+                            "4": "james.castillo10@outlook.com",
+                            "5": "Male",
+                            "6": "+1-403-356-7126",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 10,
+                            "11": 2,
+                            "12": "2026-09-06",
+                            "13": 2,
+                            "14": "Python for Data Engineering",
+                            "15": "7999.00",
+                            "16": 3,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 44,
+                            "1": "Melissa Cox",
+                            "2": 28,
+                            "3": "5106 Cedar Ln, Philadelphia, PA 85849",
+                            "4": "melissa.cox44@gmail.com",
+                            "5": "Female",
+                            "6": "+1-584-606-4249",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 44,
+                            "11": 2,
+                            "12": "2026-09-12",
+                            "13": 2,
+                            "14": "Python for Data Engineering",
+                            "15": "7999.00",
+                            "16": 3,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 75,
+                            "1": "Kevin Singh",
+                            "2": 22,
+                            "3": "2705 Hill St, Dallas, TX 73156",
+                            "4": "kevin.singh75@mail.com",
+                            "5": "Male",
+                            "6": "+1-317-679-2233",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 75,
+                            "11": 2,
+                            "12": "2026-09-14",
+                            "13": 2,
+                            "14": "Python for Data Engineering",
+                            "15": "7999.00",
+                            "16": 3,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 2,
+                            "1": "Puja Tomar",
+                            "2": 26,
+                            "3": "2625 Highland Ave, New York, NY 65392",
+                            "4": "pooja.turner2@outlook.com",
+                            "5": "Female",
+                            "6": "+1-981-544-2674",
+                            "7": 1,
+                            "8": null,
+                            "9": "2026-10-01 07:58:04",
+                            "10": 2,
+                            "11": 3,
+                            "12": "2026-09-02",
+                            "13": 3,
+                            "14": "Java Backend Development",
+                            "15": "9999.00",
+                            "16": 6,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 22,
+                            "1": "Henry Rodriguez",
+                            "2": 22,
+                            "3": "8910 Highland Ave, Miami, FL 49651",
+                            "4": "henry.rodriguez22@university.edu",
+                            "5": "Male",
+                            "6": "+1-741-208-5905",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 22,
+                            "11": 3,
+                            "12": "2026-09-09",
+                            "13": 3,
+                            "14": "Java Backend Development",
+                            "15": "9999.00",
+                            "16": 6,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 101,
+                            "1": "Sharon Alvarez",
+                            "2": 16,
+                            "3": "dharavi",
+                            "4": "arif@gmail.com",
+                            "5": "Male",
+                            "6": "+9132534546",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 101,
+                            "11": 3,
+                            "12": "2026-09-18",
+                            "13": 3,
+                            "14": "Java Backend Development",
+                            "15": "9999.00",
+                            "16": 6,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 1,
+                            "1": "Linda Hernandez",
+                            "2": 20,
+                            "3": "8945 Maple Dr, Houston, TX 87397",
+                            "4": "linda.patel1@hotmail.com",
+                            "5": null,
+                            "6": "+1-438-717-1434",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 1,
+                            "11": 4,
+                            "12": "2026-09-15",
+                            "13": 4,
+                            "14": "Apache Spark",
+                            "15": "8999.00",
+                            "16": 3,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 5,
+                            "1": "Frank Hughes",
+                            "2": 27,
+                            "3": null,
+                            "4": "frank.hughes5@student.edu",
+                            "5": "Male",
+                            "6": "+1-367-673-7216",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 5,
+                            "11": 4,
+                            "12": "2026-09-03",
+                            "13": 4,
+                            "14": "Apache Spark",
+                            "15": "8999.00",
+                            "16": 3,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 48,
+                            "1": "Jerry White",
+                            "2": 22,
+                            "3": "4591 Willow Way, Seattle, WA 46211",
+                            "4": "jerry.white48@university.edu",
+                            "5": null,
+                            "6": "+1-287-447-7658",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 48,
+                            "11": 4,
+                            "12": "2026-09-13",
+                            "13": 4,
+                            "14": "Apache Spark",
+                            "15": "8999.00",
+                            "16": 3,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 7,
+                            "1": "Rohan Gomez",
+                            "2": 27,
+                            "3": "2297 Lake Rd, Dallas, TX 83579",
+                            "4": "rohan.gomez7@university.edu",
+                            "5": "Male",
+                            "6": "+1-797-608-6930",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 7,
+                            "11": 5,
+                            "12": "2026-09-05",
+                            "13": 5,
+                            "14": "Power BI Dashboards",
+                            "15": "3999.00",
+                            "16": 1,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 39,
+                            "1": "Ayse Carter",
+                            "2": 22,
+                            "3": "6875 2nd St, Boston, MA 81582",
+                            "4": "ayse.carter39@mail.com",
+                            "5": "Female",
+                            "6": "+1-424-479-8140",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 39,
+                            "11": 5,
+                            "12": "2026-09-11",
+                            "13": 5,
+                            "14": "Power BI Dashboards",
+                            "15": "3999.00",
+                            "16": 1,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 10,
+                            "1": "James Castillo",
+                            "2": 21,
+                            "3": "8327 Cedar Ln, Philadelphia, PA 91959",
+                            "4": "james.castillo10@outlook.com",
+                            "5": "Male",
+                            "6": "+1-403-356-7126",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 10,
+                            "11": 6,
+                            "12": "2026-09-06",
+                            "13": 6,
+                            "14": "AWS Cloud Practitioner",
+                            "15": "6999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 12,
+                            "1": "Aman Yilmaz",
+                            "2": 29,
+                            "3": "2113 Spring St, Phoenix, AZ 72296",
+                            "4": "aman.yilmaz12@university.edu",
+                            "5": "Male",
+                            "6": "+1-821-633-4470",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 12,
+                            "11": 6,
+                            "12": "2026-09-07",
+                            "13": 6,
+                            "14": "AWS Cloud Practitioner",
+                            "15": "6999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 44,
+                            "1": "Melissa Cox",
+                            "2": 28,
+                            "3": "5106 Cedar Ln, Philadelphia, PA 85849",
+                            "4": "melissa.cox44@gmail.com",
+                            "5": "Female",
+                            "6": "+1-584-606-4249",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 44,
+                            "11": 6,
+                            "12": "2026-09-12",
+                            "13": 6,
+                            "14": "AWS Cloud Practitioner",
+                            "15": "6999.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 10,
+                            "1": "James Castillo",
+                            "2": 21,
+                            "3": "8327 Cedar Ln, Philadelphia, PA 91959",
+                            "4": "james.castillo10@outlook.com",
+                            "5": "Male",
+                            "6": "+1-403-356-7126",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 10,
+                            "11": 7,
+                            "12": "2026-09-10",
+                            "13": 7,
+                            "14": "Apache Kafka",
+                            "15": "8499.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 22,
+                            "1": "Henry Rodriguez",
+                            "2": 22,
+                            "3": "8910 Highland Ave, Miami, FL 49651",
+                            "4": "henry.rodriguez22@university.edu",
+                            "5": "Male",
+                            "6": "+1-741-208-5905",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 22,
+                            "11": 7,
+                            "12": "2026-09-09",
+                            "13": 7,
+                            "14": "Apache Kafka",
+                            "15": "8499.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        },
+                        {
+                            "0": 96,
+                            "1": "Melissa Gupta",
+                            "2": 24,
+                            "3": "1453 Church St, Denver, CO 23875",
+                            "4": "melissa.gupta96@yahoo.com",
+                            "5": "Female",
+                            "6": "+1-280-605-6083",
+                            "7": 1,
+                            "8": null,
+                            "9": null,
+                            "10": 96,
+                            "11": 7,
+                            "12": "2026-09-17",
+                            "13": 7,
+                            "14": "Apache Kafka",
+                            "15": "8499.00",
+                            "16": 2,
+                            "17": "2026-10-16 08:33:57",
+                            "18": "2026-10-16 08:33:57"
+                        }
+                    ],
+                    "columns": [
+                        {
+                            "title": "student_id",
+                            "field": "0",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "student_name",
+                            "field": "1",
+                            "dataType": {
+                                "type": 17,
+                                "characterMaximumLength": 65535,
+                                "flags": [
+                                    "BINARY",
+                                    "ASCII",
+                                    "UNICODE"
+                                ],
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "student_age",
+                            "field": "2",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "student_address",
+                            "field": "3",
+                            "dataType": {
+                                "type": 17,
+                                "characterMaximumLength": 65535,
+                                "flags": [
+                                    "BINARY",
+                                    "ASCII",
+                                    "UNICODE"
+                                ],
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "student_email",
+                            "field": "4",
+                            "dataType": {
+                                "type": 17,
+                                "characterMaximumLength": 65535,
+                                "flags": [
+                                    "BINARY",
+                                    "ASCII",
+                                    "UNICODE"
+                                ],
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "student_gender",
+                            "field": "5",
+                            "dataType": {
+                                "type": 17,
+                                "characterMaximumLength": 65535,
+                                "flags": [
+                                    "BINARY",
+                                    "ASCII",
+                                    "UNICODE"
+                                ],
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "student_contact",
+                            "field": "6",
+                            "dataType": {
+                                "type": 17,
+                                "characterMaximumLength": 65535,
+                                "flags": [
+                                    "BINARY",
+                                    "ASCII",
+                                    "UNICODE"
+                                ],
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "student_is_active",
+                            "field": "7",
+                            "dataType": {
+                                "type": 42,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "createdAt",
+                            "field": "8",
+                            "dataType": {
+                                "type": 26,
+                                "dateTimePrecision": 8,
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "updateAt",
+                            "field": "9",
+                            "dataType": {
+                                "type": 26,
+                                "dateTimePrecision": 8,
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "student_id",
+                            "field": "10",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "course_id",
+                            "field": "11",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "enrolled_on",
+                            "field": "12",
+                            "dataType": {
+                                "type": 27,
+                                "needsQuotes": true
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "course_id",
+                            "field": "13",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "course_name",
+                            "field": "14",
+                            "dataType": {
+                                "type": 17,
+                                "characterMaximumLength": 65535,
+                                "flags": [
+                                    "BINARY",
+                                    "ASCII",
+                                    "UNICODE"
+                                ],
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "course_fee",
+                            "field": "15",
+                            "dataType": {
+                                "type": 10,
+                                "flags": [
+                                    "UNSIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 65,
+                                "numericScale": 30,
+                                "parameterFormatType": "TwoOrOneOrZero",
+                                "synonyms": [
+                                    "FIXED",
+                                    "NUMERIC",
+                                    "DEC"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "course_duration_months",
+                            "field": "16",
+                            "dataType": {
+                                "type": 4,
+                                "flags": [
+                                    "SIGNED",
+                                    "ZEROFILL"
+                                ],
+                                "numericPrecision": 10,
+                                "parameterFormatType": "OneOrZero",
+                                "synonyms": [
+                                    "INTEGER",
+                                    "INT4"
+                                ]
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "createdAt",
+                            "field": "17",
+                            "dataType": {
+                                "type": 26,
+                                "dateTimePrecision": 8,
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        },
+                        {
+                            "title": "updateAt",
+                            "field": "18",
+                            "dataType": {
+                                "type": 26,
+                                "dateTimePrecision": 8,
+                                "needsQuotes": true,
+                                "parameterFormatType": "OneOrZero"
+                            },
+                            "inPK": false,
+                            "nullable": false,
+                            "autoIncrement": false
+                        }
+                    ],
+                    "executionInfo": {
+                        "text": "OK, 24 records retrieved in 2.928ms"
+                    },
+                    "totalRowCount": 24,
+                    "hasMoreRows": false,
+                    "currentPage": 0,
+                    "index": 0,
+                    "sql": "SELECT * FROM students \nINNER JOIN student_course_mapping ON students.student_id = student_course_mapping.student_id\nINNER JOIN course_master ON course_master.course_id = student_course_mapping.course_id;",
+                    "updatable": false,
+                    "fullTableName": ""
+                }
+            ]
+        },
+        {
+            "state": {
+                "start": 134,
+                "end": 134,
                 "language": "mysql",
                 "currentSet": 1,
                 "statements": [
