@@ -36,7 +36,7 @@ Each lecture lives in its own folder. All lectures work on the same `pal_india` 
 | [Lecture 2](Lecture%202/readme.md) | Pagination with LIMIT/OFFSET, multi-column sorting, column & table aliases, LIKE wildcards, order of clauses cheat sheet |
 | [Lecture 3](Lecture%203/readme.md) | UPDATE, `ON UPDATE CURRENT_TIMESTAMP`, COUNT/SUM/AVG/MIN/MAX, GROUP BY, HAVING, ANY_VALUE, subqueries with IN, AND/OR precedence, BETWEEN, views, `SHOW PROCEDURE STATUS` |
 | [Lecture 4](Lecture%204/readme.md) | Managing views, EXPLAIN / EXPLAIN ANALYZE, composite UNIQUE index, `addresses` table with ENUM + foreign key (ON DELETE CASCADE), INNER/LEFT/RIGHT/CROSS joins, full outer join via UNION |
-| [Lecture 5](Lecture%205/readme.md) | JOIN recap with selected columns, `IFNULL` / `COALESCE` for NULL values, Common Table Expressions (`WITH ... AS`), CTE vs view |
+| [Lecture 5](Lecture%205/readme.md) | JOIN recap with selected columns, `IFNULL` / `COALESCE` for NULL values, Common Table Expressions (`WITH ... AS`), CTE vs view, `marks` table with an inline foreign key, grades with `CASE WHEN` + LEFT JOIN |
 
 ```
 Mysql Notes/

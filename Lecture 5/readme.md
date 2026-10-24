@@ -1,6 +1,6 @@
-# MySQL Lecture 5 — IFNULL & Common Table Expressions (CTE)
+# MySQL Lecture 5 — IFNULL, CTEs, a Marks Table & CASE Grades
 
-In this lecture we went back to the `students` ⋈ `addresses` **INNER JOIN** from Lecture 4, picked only the columns we needed, replaced missing genders with a friendly label using **`IFNULL`**, and then saved the join under a temporary name with a **Common Table Expression** (`WITH ... AS`) so we could filter it like a normal table.
+In this lecture we went back to the `students` ⋈ `addresses` **INNER JOIN** from Lecture 4, picked only the columns we needed, replaced missing genders with a friendly label using **`IFNULL`**, and then saved the join under a temporary name with a **Common Table Expression** (`WITH ... AS`) so we could filter it like a normal table. In the second half we created a third table — **`marks`** — filled it with 100 exam scores, and used a **`LEFT JOIN`** with a **`CASE` expression** to turn every score into a grade (`A`–`F`, or `ABSENT`).
 
 ## What this lecture covers
 
@@ -11,6 +11,10 @@ In this lecture we went back to the `students` ⋈ `addresses` **INNER JOIN** fr
 | NULL handling | `IFNULL(column, 'replacement')`, column alias with `AS` |
 | CTEs | `WITH name AS ( SELECT ... ) SELECT ... FROM name` |
 | Filtering | `WHERE` with several `OR` conditions |
+| DDL | `CREATE TABLE` with an inline `FOREIGN KEY ... REFERENCES` |
+| DML | 100-row `INSERT` with `NULL` values |
+| Conditional logic | `CASE WHEN ... THEN ... ELSE ... END`, `IS NULL` |
+| Joins (2) | `LEFT JOIN` with aliases, `s.*` |
 
 **Tool used:** VS Code + SQL Notebook extension (run one cell at a time with `Shift+Enter`)
 
@@ -30,7 +34,7 @@ In this lecture we went back to the `students` ⋈ `addresses` **INNER JOIN** fr
 |---|---|---|---|---|---|---|---|---|
 | 1 | 1 | Home | 12 MG Road | Indore | Madhya Pradesh | 452001 | … | … |
 
-The 14 addresses belong to **9 students** — ids 1, 2, 5, 7, 10, 12, 22, 44 and 101. Every query in this lecture only ever shows those 9 students, because they all use `INNER JOIN`.
+The 14 addresses belong to **9 students** — ids 1, 2, 5, 7, 10, 12, 22, 44 and 101. Every query in sections 2–5 only ever shows those 9 students, because they all use `INNER JOIN`.
 
 ---
 
@@ -289,6 +293,228 @@ Running `SELECT * FROM studentData;` on its own, after the statement has finishe
 > 1. Change the CTE to use `IFNULL(students.student_gender, 'NOT SELECTED') AS student_gender`, then filter with `WHERE student_gender = 'NOT SELECTED'` — you should get Linda's 3 rows.
 > 2. Write a CTE that returns only students older than 25 who have a `Home` address (hint: add `addresses.address_type` to the CTE's columns).
 
+## 6. A third table: marks
+
+```sql
+USE pal_india;
+
+CREATE TABLE marks (
+    mark_id    INT PRIMARY KEY AUTO_INCREMENT,
+    student_id INT NOT NULL,
+    subject    VARCHAR(30) NOT NULL,
+    score      INT NULL,                       -- NULL = student was absent
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+-- OK, 0 records retrieved
+```
+
+`USE pal_india;` is run again first — harmless if you're already in `pal_india`, and a good habit at the start of a new block of work.
+
+**Column by column:**
+
+| Column | Definition | Meaning |
+|--------|-----------|---------|
+| `mark_id` | `INT PRIMARY KEY AUTO_INCREMENT` | 1, 2, 3 … filled in automatically |
+| `student_id` | `INT NOT NULL` | whose mark this is — required |
+| `subject` | `VARCHAR(30) NOT NULL` | `Maths`, `Science`, `English`, `History`, `Computer` |
+| `score` | `INT NULL` | the mark out of 100 — `NULL` means the student was **absent** |
+| `FOREIGN KEY (student_id) REFERENCES students(student_id)` | | every `student_id` must exist in `students` |
+
+One student has **many** marks (one per subject) — another **one-to-many** relationship, just like `addresses`:
+
+```
+addresses (many) >───── students (1) ─────< marks (many)
+```
+
+**Differences from the `addresses` foreign key in Lecture 4:**
+
+- Here the foreign key is written **inside** `CREATE TABLE`, not added later with `ALTER TABLE`. Both ways give the same result.
+- It has **no name**, so MySQL makes one up (`marks_ibfk_1`). Run `SHOW CREATE TABLE marks;` to see it. Naming it yourself (`CONSTRAINT fk_marks_student FOREIGN KEY ...`) makes it easier to drop later.
+- It has **no `ON DELETE`** rule, so the default `RESTRICT` applies: deleting a student who has marks is **refused** (`Error 1451: Cannot delete or update a parent row`). With `addresses`, `ON DELETE CASCADE` deleted the addresses instead.
+
+> Using `NULL` for "absent" is a deliberate choice: a `0` would mean "sat the exam and scored zero", which is different. `NULL` means "no score exists". Section 9 shows why that matters.
+
+**Common mistake:** running `CREATE TABLE marks` twice → `Error 1050: Table 'marks' already exists`. Use `CREATE TABLE IF NOT EXISTS marks (...)` if you might re-run the cell.
+
+## 7. Filling marks
+
+```sql
+INSERT INTO marks (student_id, subject, score) VALUES
+(1,  'Maths', 85),   (1,  'Science', 72),   (1,  'English', NULL), (1,  'History', 64),   (1,  'Computer', 90),
+(2,  'Maths', 45),   (2,  'Science', NULL), (2,  'English', 91),   (2,  'History', 58),   (2,  'Computer', 77),
+...
+(20, 'Maths', 39),   (20, 'Science', 44),   (20, 'English', 36),   (20, 'History', 50),   (20, 'Computer', 42)
+-- OK, 100 rows affected
+```
+
+**How it works:**
+
+- The column list names 3 columns; `mark_id` is filled in automatically (1–100).
+- Each line holds **5 rows**, one per subject, for one student. Several `( ... )` groups can sit on the same line; only the commas between them matter.
+- Students **1 to 20** get marks: 20 students × 5 subjects = **100 rows**.
+- **8 scores are `NULL`** (absent):
+
+| student_id | Student | Absent in |
+|-----------|---------|-----------|
+| 1 | Linda Hernandez | English |
+| 2 | Puja Tomar | Science |
+| 5 | Frank Hughes | Maths |
+| 7 | Rohan Gomez | History |
+| 9 | Aiden Ortiz | Computer |
+| 12 | Aman Yilmaz | Science |
+| 16 | Aaron Gupta | English |
+| 19 | Dennis Davis | History |
+
+- For every row, the foreign key checks that the student exists. Ids 1–20 all do, so the insert succeeds.
+- `NULL` is written **without quotes**. `'NULL'` in quotes would be the text "NULL", and since `score` is an `INT`, strict mode rejects it (`Error 1366: Incorrect integer value`).
+
+> **Gotcha — missing semicolon:** the `INSERT` has no `;` after the last row. It works in SQL Notebook because the blank line starts a new cell, but on the MySQL command line the next `select * from marks` would be glued onto the `INSERT` and fail.
+
+> **Try it yourself:** `INSERT INTO marks (student_id, subject, score) VALUES (999, 'Maths', 50);` — the foreign key rejects it because student 999 doesn't exist.
+
+## 8. Looking at marks
+
+```sql
+SELECT * FROM marks;   -- 100 rows
+```
+
+First rows:
+
+| mark_id | student_id | subject | score |
+|--------|-----------|---------|-------|
+| 1 | 1 | Maths | 85 |
+| 2 | 1 | Science | 72 |
+| 3 | 1 | English | `NULL` |
+| 4 | 1 | History | 64 |
+| 5 | 1 | Computer | 90 |
+| 6 | 2 | Maths | 45 |
+| … | … | … | … |
+| 100 | 20 | Computer | 42 |
+
+The table only stores ids, so you can't see **who** student 1 is without joining to `students`. That's what the next query does.
+
+> **Try it yourself:** `SELECT student_id, AVG(score) FROM marks GROUP BY student_id;` — `AVG` skips `NULL`s, so Linda's average is over her 4 real scores: (85 + 72 + 64 + 90) / 4 = 77.75.
+
+## 9. Grades with CASE + LEFT JOIN
+
+```sql
+SELECT s.*,
+       m.mark_id, m.subject, m.score,
+       CASE
+           WHEN m.score >= 90 THEN 'A'
+           WHEN m.score >= 80 THEN 'B'
+           WHEN m.score >= 70 THEN 'C'
+           WHEN m.score >= 60 THEN 'D'
+           WHEN m.score >= 50 THEN 'E'
+           WHEN m.score IS NULL THEN 'ABSENT'
+           ELSE 'F'
+       END AS grade
+FROM students s
+LEFT JOIN marks AS m ON s.student_id = m.student_id
+-- 181 rows, 14 columns
+```
+
+**Clause by clause:**
+
+| Piece | What it does |
+|-------|--------------|
+| `s.*` | every column of `students` (all 10) |
+| `m.mark_id, m.subject, m.score` | three columns from `marks` |
+| `CASE ... END AS grade` | a new, computed column called `grade` |
+| `FROM students s` | alias `s` for `students` (the `AS` is left out; it's optional) |
+| `LEFT JOIN marks AS m ON ...` | keep **every** student, with their marks where they have any |
+
+### How CASE works
+
+`CASE` is SQL's **if / else-if / else**. For each row MySQL checks the `WHEN` conditions **from top to bottom** and returns the `THEN` value of the **first** one that is true. If none is true, it returns the `ELSE` value.
+
+```
+if   score >= 90   → 'A'
+elif score >= 80   → 'B'
+elif score >= 70   → 'C'
+elif score >= 60   → 'D'
+elif score >= 50   → 'E'
+elif score IS NULL → 'ABSENT'
+else               → 'F'
+```
+
+| score | Checks made | grade |
+|-------|-------------|-------|
+| 95 | `>= 90` ✔ | A |
+| 85 | `>= 90` ✘, `>= 80` ✔ | B |
+| 90 | `>= 90` ✔ (90 is included) | A |
+| 50 | … `>= 50` ✔ | E |
+| 49 | all `>=` ✘, `IS NULL` ✘ → `ELSE` | F |
+| `NULL` | all `>=` give `NULL` (not true), `IS NULL` ✔ | ABSENT |
+
+- Because the checks stop at the first match, `WHEN m.score >= 80` doesn't need `AND m.score < 90`: any score of 90+ already returned `'A'`.
+- Order matters: if `>= 50` came first, every passing score would get `'E'`.
+- `NULL >= 90` is neither true nor false. It's `NULL`, so it doesn't match. That's why `NULL` scores fall through to `WHEN m.score IS NULL`. Writing `WHEN m.score = NULL` would **never** match, and absent students would get `'F'`.
+- `END AS grade`: `END` closes the `CASE`, and `AS grade` names the column.
+
+Result for Linda Hernandez (id 1, student columns shortened):
+
+| student_id | student_name | … | mark_id | subject | score | grade |
+|-----------|--------------|---|--------|---------|-------|-------|
+| 1 | Linda Hernandez | … | 1 | Maths | 85 | B |
+| 1 | Linda Hernandez | … | 2 | Science | 72 | C |
+| 1 | Linda Hernandez | … | 3 | English | `NULL` | ABSENT |
+| 1 | Linda Hernandez | … | 4 | History | 64 | D |
+| 1 | Linda Hernandez | … | 5 | Computer | 90 | A |
+
+Grades across all 100 marks:
+
+| grade | Score range | Count |
+|-------|-------------|-------|
+| A | 90–100 | 15 |
+| B | 80–89 | 14 |
+| C | 70–79 | 13 |
+| D | 60–69 | 11 |
+| E | 50–59 | 11 |
+| F | below 50 | 28 |
+| ABSENT | `NULL` | 8 |
+
+Student 8 (Brian Rogers) and student 15 (Arjun Verma) score B or better in every subject; student 11 (Pooja Sharma) gets F in all five.
+
+### Why 181 rows?
+
+`LEFT JOIN` keeps every row of the **left** table (`students`):
+
+- students 1–20 have 5 marks each → **100** rows
+- students 21–101 have **no** marks, but they still appear **once each**, with `NULL` in `mark_id`, `subject` and `score` → **81** rows
+- 100 + 81 = **181**
+
+| student_id | student_name | … | mark_id | subject | score | grade |
+|-----------|--------------|---|--------|---------|-------|-------|
+| 21 | Kevin Bennett | … | `NULL` | `NULL` | `NULL` | **ABSENT** |
+
+> **Gotcha:** those 81 students get `grade = 'ABSENT'` too, because their `m.score` is `NULL`. But they weren't absent; they have **no marks at all**. In total the result has **89** `ABSENT` rows: 8 real absences + 81 students without marks. You can tell them apart with `m.mark_id`, which is only `NULL` when there is no `marks` row:
+>
+> ```sql
+> CASE
+>     WHEN m.mark_id IS NULL THEN 'NO MARKS'   -- no row in marks at all
+>     WHEN m.score IS NULL THEN 'ABSENT'       -- row exists, score missing
+>     WHEN m.score >= 90 THEN 'A'
+>     ...
+> END AS grade
+> ```
+>
+> Or use `INNER JOIN` instead of `LEFT JOIN` to show only students who have marks (100 rows).
+
+> **Gotcha — missing semicolon:** this query also has no `;` at the end. That's fine as the last cell in the notebook, but add it when running statements together.
+
+**Common mistakes**
+
+- Forgetting `END` → syntax error.
+- A comma between `WHEN` lines (`WHEN ... THEN 'A', WHEN ...`) → syntax error. `WHEN` clauses are separated only by spaces or new lines.
+- Leaving out `ELSE` → rows that match no `WHEN` get `NULL`.
+- Putting the `WHEN` lines in the wrong order (lowest band first) → almost everyone gets the same grade.
+
+> **Try it yourself:**
+> 1. Change `LEFT JOIN` to `INNER JOIN` — you should get 100 rows and only 8 `ABSENT`s.
+> 2. Show only the failures: wrap the query in a CTE (section 5) and add `WHERE grade = 'F'` to the outer `SELECT` — 28 rows.
+> 3. Add a `result` column with a second `CASE`: `'PASS'` when `m.score >= 50`, otherwise `'FAIL'`.
+
 ---
 
 ## Commands Summary
@@ -306,3 +532,8 @@ Running `SELECT * FROM studentData;` on its own, after the statement has finishe
 | `WITH name AS (SELECT ...) SELECT ... FROM name` | Common Table Expression — a named result usable only inside this statement |
 | `WHERE a OR b OR c` | Keep the row if at least one condition is true |
 | `col IS NULL` | The correct way to test for `NULL` (`= NULL` never matches) |
+| `FOREIGN KEY (col) REFERENCES t(col)` inside `CREATE TABLE` | Link a column to a parent table while creating the table |
+| `INSERT INTO t (cols) VALUES (...), (...)` | Insert many rows in one statement (`NULL` without quotes) |
+| `CASE WHEN cond THEN x ... ELSE y END` | If / else-if / else: returns the value of the first true condition |
+| `t1 s LEFT JOIN t2 AS m ON ...` | All rows of `t1`, with `NULL`s where `t2` has no match |
+| `s.*` | Every column of the table with alias `s` |
